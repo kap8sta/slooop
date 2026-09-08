@@ -1,0 +1,26 @@
+[project]
+name = "chess7-42"
+version = "0.1.0"
+description = "simple online chess app"
+authors = [
+    {name = "sheluha",email = "287476650+mollyplov@users.noreply.github.com"}
+]
+license = "MIT License"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard] (>=0.139.2,<0.140.0)",
+    "pydantic (>=2.13.4,<3.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.1.1,<10.0.0)"
+]
