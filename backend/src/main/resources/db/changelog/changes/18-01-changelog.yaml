@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1787067338033-1
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropColumn:
+            columnName: result
+            tableName: matches
+  - changeSet:
+      id: 1787067338034-2
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: result
+                  type: VARCHAR(255)
+            tableName: matches
+

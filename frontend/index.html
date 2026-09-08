@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Шахматы</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app" class="shell">
+    <section id="auth-section" class="panel hidden">
+      <h1>Шахматы</h1>
+      <p class="muted">Войдите, чтобы создать партию или присоединиться к комнате.</p>
+      <label>Логин
+        <input id="username" type="text" autocomplete="username" minlength="3" maxlength="20" placeholder="от 3 до 20 символов">
+      </label>
+      <label>Пароль
+        <input id="password" type="password" autocomplete="current-password" minlength="5" maxlength="20" placeholder="от 5 до 20 символов">
+      </label>
+      <div class="row">
+        <button id="btn-login" class="btn primary" type="button">Войти</button>
+        <button id="btn-register" class="btn" type="button">Регистрация</button>
+      </div>
+      <button id="btn-guest" class="btn ghost" type="button">Войти как гость</button>
+    </section>
+
+    <section id="lobby-section" class="panel hidden">
+      <header class="bar">
+        <div>
+          <h1>Лобби</h1>
+          <p id="lobby-user" class="muted"></p>
+        </div>
+        <div class="row">
+          <button id="btn-profile" class="btn" type="button">Профиль</button>
+          <button id="btn-logout" class="btn danger" type="button">Выйти</button>
+        </div>
+      </header>
+      <div class="stack">
+        <div class="box">
+          <h2>Новая партия</h2>
+          <button id="btn-create-room" class="btn primary" type="button">Создать комнату</button>
+        </div>
+        <div class="box">
+          <h2>Присоединиться</h2>
+          <div class="row">
+            <input id="room-uuid" type="text" placeholder="UUID комнаты">
+            <button id="btn-join-room" class="btn primary" type="button">Войти</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="game-section" class="game-wrap hidden">
+      <header class="bar">
+        <div>
+          <h1 id="game-status">Подключение…</h1>
+          <p class="muted">Комната: <code id="active-room-uuid">—</code>
+            <button id="btn-copy-room" class="btn tiny" type="button">Копировать</button>
+          </p>
+        </div>
+        <button id="btn-leave-game" class="btn" type="button">В лобби</button>
+      </header>
+      <div class="game-grid">
+        <div class="board-col">
+          <div id="top-player" class="player">
+            <span id="top-player-name">Соперник</span>
+            <span id="top-player-color" class="muted">чёрные</span>
+          </div>
+          <div id="board" class="board"></div>
+          <div id="promotion" class="promotion hidden"></div>
+          <div id="bottom-player" class="player">
+            <span id="bottom-player-name">Вы</span>
+            <span id="bottom-player-color" class="muted">белые</span>
+          </div>
+        </div>
+        <aside class="side">
+          <div id="turn-text" class="turn">Ход белых</div>
+          <div class="box grow">
+            <h2>Ходы</h2>
+            <ol id="moves-list" class="moves"></ol>
+          </div>
+          <div class="box chat-box">
+            <h2>Чат</h2>
+            <div id="chat-messages" class="chat"></div>
+            <form id="chat-form" class="row">
+              <input id="chat-input" type="text" maxlength="200" placeholder="Сообщение" autocomplete="off">
+              <button class="btn primary" type="submit">Ок</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="profile-section" class="panel hidden">
+      <header class="bar">
+        <h1>Профиль</h1>
+        <button id="btn-close-profile" class="btn" type="button">В лобби</button>
+      </header>
+      <div class="row">
+        <input id="search-user-id" type="number" placeholder="ID игрока">
+        <button id="btn-search-user" class="btn" type="button">Найти</button>
+        <button id="btn-my-profile" class="btn" type="button">Мой профиль</button>
+      </div>
+      <div class="box">
+        <p>ID: <span id="profile-user-id">—</span></p>
+        <p>Логин: <span id="profile-username">—</span></p>
+        <p>Регистрация: <span id="profile-created-at">—</span></p>
+      </div>
+      <button id="btn-load-matches" class="btn primary" type="button">История партий</button>
+      <div id="profile-matches-list" class="matches-list"></div>
+    </section>
+  </div>
+  <div id="status-message" class="toast hidden"></div>
+  <script type="module" src="/src/app.ts"></script>
+</body>
+</html>

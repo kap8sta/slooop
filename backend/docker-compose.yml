@@ -1,0 +1,76 @@
+services:
+
+  # PostgreSQL: The world's most advanced open source database.
+  postgres:
+    image: postgres:15-alpine
+    container_name: chess_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - chessdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=chess_backend
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d chess_backend" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cache
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - chessredisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  python-service:
+    build:
+      context: ./chess7.42
+    profiles: ["prod"]
+    expose:
+      - "8000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  frontend:
+    build:
+      context: ./chess7.42_frontend
+    profiles: ["prod"]
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - backend
+
+  backend:
+    build: .
+    profiles: ["test", "prod"]
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/chess_backend
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+     postgres:
+       condition: service_healthy
+     redis:
+       condition: service_healthy
+    env_file:
+      .env
+
+
+volumes:
+  chessdata:
+  chessredisdata:

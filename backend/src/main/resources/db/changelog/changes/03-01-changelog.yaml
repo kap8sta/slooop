@@ -1,0 +1,150 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1785762529735-1
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: revinfo_seq
+            startValue: 1
+  - changeSet:
+      id: 1785762529735-2
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_matches
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: room_uuid
+                  type: VARCHAR(255)
+              - column:
+                  name: white_player_id
+                  type: BIGINT
+              - column:
+                  name: black_player_id
+                  type: BIGINT
+              - column:
+                  name: final_fen
+                  type: VARCHAR(255)
+              - column:
+                  name: pgn
+                  type: VARCHAR(255)
+              - column:
+                  name: result
+                  type: SMALLINT
+            tableName: matches
+  - changeSet:
+      id: 1785762529735-3
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rev
+                  type: BIGINT
+              - column:
+                  name: entityname
+                  type: VARCHAR(255)
+            tableName: revchanges
+  - changeSet:
+      id: 1785762529735-4
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_revinfo
+                  name: rev
+                  type: BIGINT
+              - column:
+                  name: revtstmp
+                  type: BIGINT
+            tableName: revinfo
+  - changeSet:
+      id: 1785762529735-5
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: users
+  - changeSet:
+      id: 1785762529735-6
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uc_users_username
+            tableName: users
+  - changeSet:
+      id: 1785762529735-7
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: black_player_id
+            baseTableName: matches
+            constraintName: FK_MATCHES_ON_BLACK_PLAYER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1785762529735-8
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: white_player_id
+            baseTableName: matches
+            constraintName: FK_MATCHES_ON_WHITE_PLAYER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1785762529735-9
+      author: paerma
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: rev
+            baseTableName: revchanges
+            constraintName: fk_revchanges_on_default_tracking_modified_entities_changelog
+            referencedColumnNames: rev
+            referencedTableName: revinfo
+
